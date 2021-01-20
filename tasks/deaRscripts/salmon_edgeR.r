@@ -7,7 +7,6 @@
 
 rm(list=ls())                      # remove all the objects from the R session
 suppressMessages(library(rnaseqdea))
-suppressMessages(library(SummarizedExperiment))
 suppressMessages(library(edgeR))
 suppressMessages(library(DT))
 suppressMessages(library(ggplot2))
