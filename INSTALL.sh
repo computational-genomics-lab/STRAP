@@ -96,7 +96,12 @@ DEA_SCRIPTS=$BASE_DIR/utility/deaRscripts
 
 THIS_FILE=$(basename "$0")
 THIS_PATH="$THIS_DIR/$THIS_FILE"
-PREFIX=$THIS_DIR/tools
+
+#PREFIX=$THIS_DIR/tools 
+#modified on 29 Jan 2021
+
+HOME_DIR=$HOME
+PREFIX=$HOME_DIR/STRAP
 
 sleep 2s;
 
@@ -252,11 +257,21 @@ if [[ $EntryPoint ]]; then
     echo "export PATH=\"$(pwd)/Scripts\":\$PATH" >> ~/.bashrc
 fi
 
+#if [[ $EntryPoint ]]; then
+#    cd $InstallDir
+#    git clone "https://github.com/grimbough/rhdf5.git" >> /dev/null 2>&1 
+#    rhdf5_dir="$InstallDir/rhdf5"
+#fi
+# Modified on 29 January 2021
+
 if [[ $EntryPoint ]]; then
     cd $InstallDir
-    git clone "https://github.com/grimbough/rhdf5.git" >> /dev/null 2>&1 
-    rhdf5_dir="$InstallDir/rhdf5"
+    wget 'https://codeload.github.com/grimbough/rhdf5/zip/master' --output-document 'rhdf5.zip' >> /dev/null 2>&1
+    unzip rhdf5.zip
+    rm rhdf5.zip
+    rhdf5_dir="$InstallDir/rhdf5-master"
 fi
+
 
 #######
 InstallDir=$PREFIX
@@ -290,7 +305,8 @@ declare -a list=(r-base bioconductor-delayedarray python=3.7 dart psutil libgcc 
         # 
         echo -e `date` "\e[1;36m \t\t\t\tinstalling $package\e[0m"
         echo -e  "\e[1;34mPlease Wait ...\e[0m"
-        conda install -y -c anaconda -c conda-forge -c bioconda -c defaults -c statiskit -c r $package
+	conda config --set ssl_verify no
+        conda install -y -c conda-forge -c bioconda -c defaults -c statiskit -c r $package
 
         #(conda install -y -c anaconda -c conda-forge -c bioconda -c defaults -c statiskit -c r $package >> /dev/null 2>&1) &
         #spinner $!
