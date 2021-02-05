@@ -37,6 +37,7 @@ class GlobalParameter(luigi.Config):
 	#result_tag=luigi.Parameter()
 
 	annotation_suffix=luigi.Parameter()
+	project_name=luigi.Parameter()
 
 class alignmentBasedDEA(luigi.Task):
 	adapter = GlobalParameter().adapter
@@ -44,9 +45,10 @@ class alignmentBasedDEA(luigi.Task):
 	read_library_type = GlobalParameter().read_library_type
 	#result_tag = GlobalParameter().result_tag
 	feature_type = GlobalParameter().feature_type
+	project_name=GlobalParameter().project_name
 
 	# Local parameters
-	project_name = luigi.Parameter(default="RNASeqAnalysis")
+	
 	rnaseq_aligner = luigi.ChoiceParameter(choices=["subread", "star", "hisat2", "dart", "segemehl", "bowtie2"], var_type=str)
 	pre_process_reads = luigi.ChoiceParameter(choices=["yes", "no"], var_type=str)
 	attribute_type = luigi.ChoiceParameter(choices=["gene_id", "transcript_id"],default="gene_id", description='''Specify attribute type in GTF annotation. 
@@ -103,7 +105,7 @@ class alignmentBasedDEA(luigi.Task):
 									"DEAnalysis",
 									self.dea_method + "_" + self.rnaseq_aligner + "_" + self.result_tag + "_" + self.read_library_type + "/")
 
-		QuantFolder = os.path.join(os.getcwd(), self.project_name,
+		QuantFolder = os.path.join(os.getcwd(),GlobalParameter().project_name,
 								   "AlignmentBasedDEA",
 								   "ReadQuant",
 								   self.rnaseq_aligner + "_" + self.read_library_type + "_" + "quant" + "/")

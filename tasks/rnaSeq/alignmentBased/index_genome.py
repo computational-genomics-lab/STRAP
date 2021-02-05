@@ -3,6 +3,7 @@ import os
 import subprocess
 from Bio import SeqIO
 import math
+from tasks.rnaSeq.annotation.prokaryotic_annotation import annotateGenome
 
 def run_cmd(cmd):
     p = subprocess.Popen(cmd, bufsize=-1,
@@ -71,7 +72,9 @@ class indexGenome(luigi.Task):
 
 	def requires(self):
 
-		return []
+		if (self.organism_domain == "prokaryote") and (self.annotation_file_type == "NA"):
+			return [annotateGenome()]
+
 
 	def output(self):
 		genomeIndexFolder=os.path.join(os.getcwd(), self.project_name, "AlignmentBasedDEA","genome_index", self.genome_name +"_"+ self.rnaseq_aligner +"_index" + "/")

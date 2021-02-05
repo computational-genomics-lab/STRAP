@@ -81,7 +81,7 @@ def spades_pe_formater_reformat(pefile):
         
 
 class spades(luigi.Task):
-    project_name = luigi.Parameter(default="GenomeAssembly")
+    project_name = GlobalParameter().project_name
     read_library_type = luigi.Parameter(default="pe")
     pre_process_reads = luigi.ChoiceParameter(choices=["yes", "no"], var_type=str)
 
@@ -105,13 +105,13 @@ class spades(luigi.Task):
 
         
     def output(self):
-        spades_assembly_folder = os.path.join(os.getcwd(), self.project_name, "deNovoDEA","denovo_assembly", "spades" + "/")
+        spades_assembly_folder = os.path.join(os.getcwd(), GlobalParameter().project_name, "deNovoDEA","denovo_assembly", "spades" + "/")
         return {'out': luigi.LocalTarget(spades_assembly_folder + "transcripts.fasta")}
         
 
     def run(self):
        
-        spades_assembly_folder = os.path.join(os.getcwd(), self.project_name, "deNovoDEA","denovo_assembly", "spades" + "/")
+        spades_assembly_folder = os.path.join(os.getcwd(), GlobalParameter().project_name, "deNovoDEA","denovo_assembly", "spades" + "/")
         spades_assembly_log_folder = os.path.join(os.getcwd(),self.project_name , "log", "denovo_assembly",  "spades" + "/")
 
 
@@ -147,5 +147,3 @@ class spades(luigi.Task):
         
         print("****** NOW RUNNING COMMAND ******: " + spades_pe_cmd)
         run_cmd(spades_pe_cmd)
-
-       

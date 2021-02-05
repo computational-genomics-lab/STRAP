@@ -853,7 +853,7 @@ class  alignReadSetsToGenome(luigi.Task):
 						   sampleName=i)
 					for i in [line.strip()
 							  for line in
-							  open((os.path.join(os.getcwd(), "config", "pe_samples.lst")))]]
+							  open((os.path.join(os.getcwd(), "config", "se_samples.lst")))]]
 	def output(self):
 		timestamp = time.strftime('%Y%m%d.%H%M%S', time.localtime())
 		return luigi.LocalTarget(os.path.join(os.getcwd(), "task_logs", 'task.generate.count.complete.{t}'.format(t=timestamp)))

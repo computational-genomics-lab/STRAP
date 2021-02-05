@@ -71,17 +71,17 @@ class indexDAT(luigi.Task):
 		TranscriptIndexFolder = os.path.join(os.getcwd(), GlobalParameter().project_name,
 											 "deNovoDEA",
 											 "transcript_index",
-											 self.rnaseq_assembler +"_salmon_index" + "/")
+											 self.genome_name +  "_" + self.rnaseq_assembler +"_salmon_index" + "/")
 
 		if self.rnaseq_assembler=="rockhopper":
-			return {'out1': luigi.LocalTarget(TranscriptIndexFolder + "seq.bin"),
+			return {'out1': luigi.LocalTarget(TranscriptIndexFolder + "hash.bin"),
 				'out2': luigi.LocalTarget(TranscriptIndexFolder + "versionInfo.json")}
 
 		if self.rnaseq_assembler=="spades":
-			return {'out1': luigi.LocalTarget(TranscriptIndexFolder + "seq.bin"),
+			return {'out1': luigi.LocalTarget(TranscriptIndexFolder + "hash.bin"),
 				'out2': luigi.LocalTarget(TranscriptIndexFolder + "versionInfo.json")}
 		if self.rnaseq_assembler=="trinity":
-			return {'out1': luigi.LocalTarget(TranscriptIndexFolder + "seq.bin"),
+			return {'out1': luigi.LocalTarget(TranscriptIndexFolder + "hash.bin"),
 				'out2': luigi.LocalTarget(TranscriptIndexFolder + "versionInfo.json")}
 
 
@@ -96,8 +96,8 @@ class indexDAT(luigi.Task):
 			assembled_transcript = os.path.join(os.getcwd(), GlobalParameter().project_name,"deNovoDEA", "denovo_assembly", "spades", "transcripts.fasta")
 
 
-		TranscriptIndexFolder = os.path.join(os.getcwd(), GlobalParameter().project_name, "deNovoDEA","transcript_index",
-											 self.rnaseq_assembler +"_salmon_index" + "/")
+		TranscriptIndexFolder = os.path.join(os.getcwd(), GlobalParameter().project_name, "deNovoDEA","transcript_index", self.genome_name + "_"
+											 + self.rnaseq_assembler +"_salmon_index" + "/")
 
 		cmd_run_salmon_index_pe = "[ -d  {TranscriptIndexFolder} ] || mkdir -p {TranscriptIndexFolder}; " \
 								  "salmon index -t {assembled_transcript} " \
@@ -183,7 +183,7 @@ class denovoQuant(luigi.Task):
 										   self.rnaseq_assembler + "_denovo_salmon_quant_" + self.read_library_type + "/")
 
 		salmon_index_folder = os.path.join(os.getcwd(), GlobalParameter().project_name, "deNovoDEA","transcript_index",
-											 self.rnaseq_assembler + "_salmon_index" + "/")
+											 self.genome_name + "_" + self.rnaseq_assembler + "_salmon_index" + "/")
 
 		salmon_map_folder = os.path.join(os.getcwd(),  GlobalParameter().project_name, "deNovoDEA", "transcriptome", self.rnaseq_assembler +
 										 "_denovo_salmon_map_" + self.read_library_type + "/")
@@ -246,46 +246,38 @@ class denovoQuant(luigi.Task):
 					salmon_index_folder=salmon_index_folder,memory=self.memory,
 					threads=self.threads)
 
-		unzip_auxinfo="gzip -d -r {salmon_quant_folder}".format(salmon_quant_folder=salmon_quant_folder)
-
 		if all([self.read_library_type == "pe", self.organism_domain == "prokaryote", self.rnaseq_assembler == "rockhopper"]):
 			print("****** NOW RUNNING COMMAND ******: " + cmd_run_salmon_quant_pe)
 			print (run_cmd(cmd_run_salmon_quant_pe))
-			print (run_cmd(unzip_auxinfo))
 
 
 
 		if all([self.read_library_type == "se", self.organism_domain == "prokaryote", self.rnaseq_assembler == "rockhopper"]):
 			print("****** NOW RUNNING COMMAND ******: " + cmd_run_salmon_quant_se)
 			print (run_cmd(cmd_run_salmon_quant_se))
-			print (run_cmd(unzip_auxinfo))
 
 
 
 		if all([self.read_library_type == "pe", self.organism_domain == "eukaryote", self.rnaseq_assembler == "trinity"]):
 			print("****** NOW RUNNING COMMAND ******: " + cmd_run_salmon_quant_pe)
 			print (run_cmd(cmd_run_salmon_quant_pe))
-			print (run_cmd(unzip_auxinfo))
 
 
 		if all([self.read_library_type == "se", self.organism_domain == "eukaryote", self.rnaseq_assembler == "trinity"]):
 			print("****** NOW RUNNING COMMAND ******: " + cmd_run_salmon_quant_se)
 			print (run_cmd(cmd_run_salmon_quant_se))
-			print (run_cmd(unzip_auxinfo))
 
 
 
 		if all([self.read_library_type == "pe", self.organism_domain == "eukaryote", self.rnaseq_assembler == "spades"]):
 			print("****** NOW RUNNING COMMAND ******: " + cmd_run_salmon_quant_pe)
 			print (run_cmd(cmd_run_salmon_quant_pe))
-			print (run_cmd(unzip_auxinfo))
 
 
 
 		if all([self.read_library_type == "se", self.organism_domain == "eukaryote", self.rnaseq_assembler == "spades"]):
 			print("****** NOW RUNNING COMMAND ******: " + cmd_run_salmon_quant_se)
 			print (run_cmd(cmd_run_salmon_quant_se))
-			print (run_cmd(unzip_auxinfo))
 
 
 ##########################################################################################################################
@@ -490,8 +482,8 @@ class denovoDEA(luigi.Task):
 									 "denovo_" + self.rnaseq_assembler + "_corset_" + self.read_library_type + "/")
 
 		target_file = os.path.join(os.getcwd(),"config","target.tsv")
-		#rmd_DESeq2File = os.path.expanduser(os.path.join(('~'), 'scriptome','tasks','utility',"PlotDESEQ2.Rmd"))
-		#rmd_edgeRFile = os.path.expanduser(os.path.join(('~'), 'scriptome', 'tasks', 'utility', "PlotEDGER.Rmd"))
+		rmd_DESeq2File = os.path.expanduser(os.path.join(('~'), 'scriptome','tasks','utility',"PlotDESEQ2.Rmd"))
+		rmd_edgeRFile = os.path.expanduser(os.path.join(('~'), 'scriptome', 'tasks', 'utility', "PlotEDGER.Rmd"))
 
 		cmd_run_corset_deseq = "[ -d  {resultFolder} ] || mkdir -p {resultFolder}; " \
 						  "cd {resultFolder};" \
@@ -504,7 +496,7 @@ class denovoDEA(luigi.Task):
 						   "-a {alpha} " \
 						   "-p {p_adjust_method} " \
 						   "-l {size_factor} " \
-						   "-T $(which PlotDESEQ2.Rmd)" \
+							   "-T {rmd_DESeq2File}" \
 						.format(resultFolder=resultFolder,
 								target_file=target_file,
 								corset_folder=corset_folder,
@@ -513,7 +505,8 @@ class denovoDEA(luigi.Task):
 								fit_type=self.fit_type,
 								alpha=self.alpha,
 								p_adjust_method=self.p_adjust_method,
-								size_factor=self.size_factor)
+								size_factor=self.size_factor,
+								rmd_DESeq2File=rmd_DESeq2File)
 
 		cmd_run_corset_edger = "[ -d  {resultFolder} ] || mkdir -p {resultFolder}; " \
 							   "cd {resultFolder};" \
@@ -526,7 +519,7 @@ class denovoDEA(luigi.Task):
 							   "-a {alpha} " \
 							   "-p {p_adjust_method} " \
 							   "-l {size_factor} " \
-							   "-T $(which PlotEDGER.Rmd)" \
+							   "-T {rmd_edgeRFile}" \
 			.format(resultFolder=resultFolder,
 					target_file=target_file,
 					corset_folder=corset_folder,
@@ -535,7 +528,8 @@ class denovoDEA(luigi.Task):
 					fit_type=self.fit_type,
 					alpha=self.alpha,
 					p_adjust_method=self.p_adjust_method,
-					size_factor=self.size_factor)
+					size_factor=self.size_factor,
+					rmd_edgeRFile=rmd_edgeRFile)
 
 		if all([self.read_library_type == "pe", self.organism_domain == "prokaryote", self.rnaseq_assembler == "rockhopper",
 				self.dea_method == "deseq2"]):

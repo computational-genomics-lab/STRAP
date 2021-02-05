@@ -64,7 +64,7 @@ class indexTranscript(luigi.Task):
 
 	pre_process_reads = luigi.ChoiceParameter(choices=["yes", "no"], var_type=str)
 	quant_method = luigi.ChoiceParameter(choices=["salmon", "kallisto"], var_type=str)
-	Salmon_Index_Parameter = luigi.Parameter(default="--type quasi -k 31")
+	Salmon_Index_Parameter = luigi.Parameter(default="-k 31")
 	Kallisto_Index_Parameter = luigi.Parameter(default="-k 31")
 	sampleName = luigi.Parameter()
 
@@ -85,18 +85,18 @@ class indexTranscript(luigi.Task):
 		transcriptome_index_dir = os.path.join(os.getcwd(), self.project_name, "AlignmentFreeDEA","transcript_index", self.transcriptome_name + "_" + self.quant_method +"_index" + "/")
 
 		if (self.quant_method == "salmon") and (self.read_library_type == "pe"):
-			return {'out1': luigi.LocalTarget(transcriptome_index_dir + "hash.bin"),
+			return {'out1': luigi.LocalTarget(transcriptome_index_dir + "seq.bin"),
 					'out2': luigi.LocalTarget(transcriptome_index_dir + "versionInfo.json")}
 
 		if (self.quant_method == "salmon") and (self.read_library_type == "se"):
-			return {'out1': luigi.LocalTarget(transcriptome_index_dir + "hash.bin"),
+			return {'out1': luigi.LocalTarget(transcriptome_index_dir + "seq.bin"),
 					'out2': luigi.LocalTarget(transcriptome_index_dir + "versionInfo.json")}
 
 		if (self.quant_method == "kallisto") and (self.read_library_type == "pe"):
-			return {'out': luigi.LocalTarget(transcriptome_index_dir + "/" + "kallisto.index")}
+			return {'out': luigi.LocalTarget(transcriptome_index_dir + "/" + "kallisto.idx")}
 
 		if (self.quant_method == "kallisto") and (self.read_library_type == "se"):
-			return {'out': luigi.LocalTarget(transcriptome_index_dir + "/" + "kallisto.index")}
+			return {'out': luigi.LocalTarget(transcriptome_index_dir + "/" + "kallisto.idx")}
 
 	def run(self):
 		transcriptome_dir = os.path.join(os.getcwd(),GlobalParameter().transcriptome_dir + "/")
@@ -125,7 +125,7 @@ class indexTranscript(luigi.Task):
 		cmd_run_kallisto_index_pe = "[ -d  {transcriptome_index_dir} ] || mkdir -p {transcriptome_index_dir}; " \
 									"cd {transcriptome_index_dir}; " \
 									"kallisto index {Kallisto_Index_Parameter} " \
-									"--index=kallisto.index {transcriptome_dir}{transcriptome_name}.{transcriptome_suffix} " \
+									"--index=kallisto.idx {transcriptome_dir}{transcriptome_name}.{transcriptome_suffix} " \
 			.format(transcriptome_index_dir=transcriptome_index_dir,
 					transcriptome_name=self.transcriptome_name,
 					transcriptome_suffix=self.transcriptome_suffix,
@@ -135,7 +135,7 @@ class indexTranscript(luigi.Task):
 		cmd_run_kallisto_index_se = "[ -d  {transcriptome_index_dir} ] || mkdir -p {transcriptome_index_dir}; " \
 									"cd {transcriptome_index_dir}; " \
 									"kallisto index {Kallisto_Index_Parameter} " \
-									"--index=kallisto.index {transcriptome_dir}{transcriptome_name}.{transcriptome_suffix} " \
+									"--index=kallisto.idx {transcriptome_dir}{transcriptome_name}.{transcriptome_suffix} " \
 			.format(transcriptome_index_dir=transcriptome_index_dir,
 					transcriptome_name=self.transcriptome_name,
 					transcriptome_suffix=self.transcriptome_suffix,

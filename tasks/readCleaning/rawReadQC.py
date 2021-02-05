@@ -55,18 +55,18 @@ class readqc(luigi.Task):
 		readQC_folder = os.path.join(os.getcwd(), self.projectName,"ReadQC", "PreQC_" +self.read_library_type+"_reads" "/")
 		
 		if self.read_library_type == "pe":
-			return {'out1': luigi.LocalTarget(pe_readQC_folder + self.sampleName + "_R1_fastqc.html"),
-					'out2': luigi.LocalTarget(pe_readQC_folder + self.sampleName + "_R2_fastqc.html")}
+			return {'out1': luigi.LocalTarget(readQC_folder + self.sampleName + "_R1_fastqc.html"),
+					'out2': luigi.LocalTarget(readQC_folder + self.sampleName + "_R2_fastqc.html")}
 
 		if self.read_library_type == "se":
-			return {'out1': luigi.LocalTarget(se_readQC_folder + self.sampleName + "_fastqc.html")}
+			return {'out1': luigi.LocalTarget(readQC_folder + self.sampleName + "_fastqc.html")}
 
 		
 	def run(self):
-		readQC_folder = os.path.join(os.getcwd(), self.projectName,"ReadQC", "PreQC_" +self.read_library_type+"_reads" "/")
+		readQC_folder = os.path.join(os.getcwd(), self.projectName,"ReadQC", "PreQC_" + self.read_library_type+"_reads" "/")
 		
 		
-		read_QC_log_folder = os.path.join(os.getcwd(), "log", +self.read_library_type+"_ReadQC" + "/")
+		read_QC_log_folder = os.path.join(os.getcwd(), "log", self.read_library_type +"_ReadQC" + "/")
 
 
 
@@ -113,7 +113,7 @@ class rawReadsQC(luigi.Task):
 	def requires(self):
 
 		if self.read_library_type == "pe":
-			return [readqc(read_library_type=self.read_library_type,
+			return [readqc(
 						sampleName=i)
 					for i in [line.strip()
 							  for line in
@@ -121,7 +121,7 @@ class rawReadsQC(luigi.Task):
 
 		
 		if self.read_library_type == "se":
-			return [readqc(read_library_type=self.read_library_type,
+			return [readqc(
 						sampleName=i)
 					for i in [line.strip()
 							  for line in

@@ -172,15 +172,13 @@ class featureCounts(luigi.Task):
 
 	def run(self):
 
-
-
-		QuantFolder = os.path.join(os.getcwd(), self.project_name,
+		QuantFolder = os.path.join(os.getcwd(), GlobalParameter().project_name,
 								   "AlignmentBasedDEA",
 								   "ReadQuant",
 								   self.rnaseq_aligner + "_" + self.read_library_type + "_" + "quant" + "/")
 
-		genomeIndexFolder = os.path.join(os.getcwd(), self.project_name, "AlignmentBasedDEA","genome_index",self.genome_name + "_" + self.rnaseq_aligner + "_index" + "/")
-		mapFolder = os.path.join(os.getcwd(), self.project_name, "AlignmentBasedDEA","genome_map",self.genome_name + "_" + self.rnaseq_aligner + "_" + self.read_library_type + "_map" + "/")
+		genomeIndexFolder = os.path.join(os.getcwd(), GlobalParameter().project_name, "AlignmentBasedDEA","genome_index",self.genome_name + "_" + self.rnaseq_aligner + "_index" + "/")
+		mapFolder = os.path.join(os.getcwd(), GlobalParameter().project_name, "AlignmentBasedDEA","genome_map",self.genome_name + "_" + self.rnaseq_aligner + "_" + self.read_library_type + "_map" + "/")
 		
 		if self.annotation_file_type=="gff":
 
@@ -201,7 +199,7 @@ class featureCounts(luigi.Task):
 										"-s {strandType} " \
 										"-T {threads} " \
 										"-p " \
-										"-o counts.txt " \
+										"-o {QuantFolder}counts.txt " \
 										"{mapFolder}*.bam " \
 			.format(QuantFolder=QuantFolder,
 					feature_type=self.feature_type,
@@ -343,7 +341,7 @@ class alignmentBasedQuant(luigi.Task):
 
 	rnaseq_aligner = luigi.ChoiceParameter(choices=["subread","star","hisat2","dart", "segemehl","bowtie2"],var_type=str)
 
-	attribute_type = luigi.Parameter(default="transcript_id", description='''Specify attribute type in GTF annotation. 
+	attribute_type = luigi.Parameter(default="gene_id", description='''Specify attribute type in GTF annotation. 
 												 string(=[gene_id])''')
 
 	strandType = luigi.ChoiceParameter(default="0", choices=['0', '1', '2'], description='''perform strand-specific read counting. int([=0]unstranded) 

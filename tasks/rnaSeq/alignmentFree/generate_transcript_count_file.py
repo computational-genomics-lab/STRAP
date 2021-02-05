@@ -192,13 +192,13 @@ class transQuant(luigi.Task):
 					cleanedReadFolder=cleanedReadFolder,
 					TranscriptIndexFolder=TranscriptIndexFolder)
 
-
+		'''
 		cmd_run_kallisto_quant_pe = "[ -d {TranscriptQuantFolder} ] || mkdir -p {TranscriptQuantFolder}; " \
 									"mkdir -p {TranscriptMapFolder}; mkdir -p {TranscriptQuantFolder}; " \
 									"cd {TranscriptQuantFolder}; " \
 									"kallisto quant " \
 									"--threads={threads} " \
-									"--index={TranscriptIndexFolder}kallisto.index " \
+									"--index={TranscriptIndexFolder}kallisto.idx " \
 									"--output-dir={TranscriptQuantFolder}{sampleName} " \
 									"{cleanedReadFolder}{sampleName}_R1.fastq " \
 									"{cleanedReadFolder}{sampleName}_R2.fastq " \
@@ -214,6 +214,24 @@ class transQuant(luigi.Task):
 					sampleName=self.sampleName,
 					genome_name=self.genome_name,
 					cleanedReadFolder=cleanedReadFolder)
+		'''
+		cmd_run_kallisto_quant_pe = "[ -d {TranscriptQuantFolder} ] || mkdir -p {TranscriptQuantFolder}; " \
+									"mkdir -p {TranscriptMapFolder}; mkdir -p {TranscriptQuantFolder}; " \
+									"cd {TranscriptQuantFolder}; " \
+									"kallisto quant " \
+									"--threads={threads} " \
+									"--index={TranscriptIndexFolder}kallisto.idx " \
+									"--output-dir={TranscriptQuantFolder}{sampleName} " \
+									"{cleanedReadFolder}{sampleName}_R1.fastq " \
+									"{cleanedReadFolder}{sampleName}_R2.fastq " \
+									"--pseudobam " \
+									.format(TranscriptQuantFolder=TranscriptQuantFolder,
+					TranscriptIndexFolder=TranscriptIndexFolder,
+					threads=self.threads,
+					TranscriptMapFolder=TranscriptMapFolder,
+					sampleName=self.sampleName,
+					genome_name=self.genome_name,
+					cleanedReadFolder=cleanedReadFolder)
 
 		mean_sd = ''' awk 'BEGIN { t=0.0;sq=0.0; n=0;} ;NR%4==2 {n++;L=length($0);t+=L;sq+=L*L;}END{
 				m=t/n;printf("-l %f -s %f",m,(sq/n-m*m)+0.000001);}' '''
@@ -222,13 +240,13 @@ class transQuant(luigi.Task):
 			.format(cleanedReadFolder=cleanedReadFolder,
 					mean_sd=mean_sd,
 					sampleName=self.sampleName)
-
+		'''
 		cmd_run_kallisto_quant_se = "[ -d {TranscriptQuantFolder} ] || mkdir -p {TranscriptQuantFolder}; " \
 									"mkdir -p {TranscriptMapFolder}; mkdir -p {TranscriptQuantSampleFolder}; " \
 									"cd {TranscriptQuantSampleFolder}; " \
 									"kallisto quant " \
 									"--threads={threads} " \
-									"--index={TranscriptIndexFolder}kallisto.index " \
+									"--index={TranscriptIndexFolder}kallisto.idx " \
 									"--output-dir={TranscriptQuantFolder}{sampleName} " \
 									"--single " \
 									"{cleanedReadFolder}{sampleName}.fastq " \
@@ -246,6 +264,28 @@ class transQuant(luigi.Task):
 					threads=self.threads,
 					genome_name=self.genome_name,
 					cleanedReadFolder=cleanedReadFolder)
+		'''
+		cmd_run_kallisto_quant_se = "[ -d {TranscriptQuantFolder} ] || mkdir -p {TranscriptQuantFolder}; " \
+									"mkdir -p {TranscriptMapFolder}; mkdir -p {TranscriptQuantSampleFolder}; " \
+									"cd {TranscriptQuantSampleFolder}; " \
+									"kallisto quant " \
+									"--threads={threads} " \
+									"--index={TranscriptIndexFolder}kallisto.idx " \
+									"--output-dir={TranscriptQuantFolder}{sampleName} " \
+									"--single " \
+									"{cleanedReadFolder}{sampleName}.fastq " \
+									"$(<{cleanedReadFolder}{sampleName}.txt) " \
+									"--pseudobam " \
+									"--genomebam " \
+			.format(TranscriptQuantFolder=TranscriptQuantFolder,
+					TranscriptQuantSampleFolder=TranscriptQuantSampleFolder,
+					TranscriptIndexFolder=TranscriptIndexFolder,
+					TranscriptMapFolder=TranscriptMapFolder,
+					sampleName=self.sampleName,
+					threads=self.threads,
+					genome_name=self.genome_name,
+					cleanedReadFolder=cleanedReadFolder)
+
 
 		cmd_move_kallisto_bam_se = "mv {TranscriptQuantSampleFolder}pseudoalignments.bam {TranscriptMapFolder}{sampleName}.bam " \
 								   "&& " \

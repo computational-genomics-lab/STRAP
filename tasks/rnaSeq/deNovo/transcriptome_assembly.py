@@ -48,12 +48,12 @@ class dnTransAssemble(luigi.Task):
                     ]
 
         if self.rnaseq_assembler == "spades":
-            return [spades(project_name=self.project_name, read_library_type=self.read_library_type,
+            return [spades(
                            pre_process_reads=self.pre_process_reads)
                     ]
 
         if self.rnaseq_assembler == "trinity":
-            return [trinity(project_name=self.project_name,
+            return [trinity(
                             pre_process_reads=self.pre_process_reads)
                     ]
 

@@ -221,7 +221,7 @@ class denovoQuant(luigi.Task):
 								  "-2 {clean_read_folder}{sampleName}_R2.fastq " \
 								  "--dumpEq " \
 								  "--output {salmon_quant_folder}{sampleName} " \
-								  "--validateMappings " \
+								  "--validateMappings --hardFilter " \
 								  "--writeMappings | samtools view -bS - | samtools sort -m {memory}G " \
 								  "-o {salmon_map_folder}{sampleName}.bam" \
 			.format(salmon_quant_folder=salmon_quant_folder,
@@ -243,7 +243,7 @@ class denovoQuant(luigi.Task):
 								  "-r {clean_read_folder}{sampleName}.fastq " \
 								  "--dumpEq " \
 								  "--output {salmon_quant_folder}{sampleName} " \
-								  "--validateMappings " \
+								  "--validateMappings --hardFilter " \
 								  "--writeMappings | samtools view -bS - | samtools sort -m {memory}G " \
 								  "-o {salmon_map_folder}{sampleName}.bam" \
 			.format(salmon_quant_folder=salmon_quant_folder,
@@ -395,3 +395,207 @@ class clusterDnTranscript(luigi.Task):
 
 		print("****** NOW RUNNING COMMAND ******: " + cmd_run_supertrans)
 		print(run_cmd(cmd_run_supertrans))
+
+
+
+	class denovoDEA(luigi.Task):
+		adapter = GlobalParameter().adapter
+		organism_domain = GlobalParameter().domain
+		read_library_type = GlobalParameter().read_library_type
+		result_tag = luigi.Parameter(default="treated_vs_control")
+
+		project_name = GlobalParameter().project_name
+		rnaseq_assembler = luigi.ChoiceParameter(choices=["trinity", "spades", "rockhopper"], var_type=str)
+		pre_process_reads = luigi.ChoiceParameter(choices=["yes", "no"], var_type=str)
+		dea_method = luigi.ChoiceParameter(choices=["deseq2", "edger"], var_type=str)
+		report_name = luigi.Parameter(default="Corset_DESeq2_HTML_Report")
+		factor_of_intrest = luigi.Parameter(default="condititions",description="factor of intrest column of the target file (string [=condititions]). ")
+		reference_condition = luigi.Parameter(default="control", description="reference biological condition.  (string [=control]")
+		#target_file = luigi.Parameter(description="path to the design/target file. (string [=target.tsv]")
+		alpha = luigi.Parameter(default="0.05", description="threshold of statistical significance.  (float [=0.05]")
+		p_adjust_method = luigi.ChoiceParameter(default="BH", description="p-value adjustment method.",choices=["BH", "BY"],var_type=str)
+		fit_type = luigi.ChoiceParameter(default="parametric", description="mean-variance relationship.",  choices=["parametric", "local","mean"],var_type=str)
+		size_factor = luigi.ChoiceParameter(default="median", description="method to estimate the size factors.", choices=["median", "shorth"],var_type=str)
+
+
+		def requires(self):
+			return [clusterDnTranscript(rnaseq_assembler=self.rnaseq_assembler,
+							   pre_process_reads=self.pre_process_reads)]
+
+		def output(self):
+
+			#edgeResultFolter = GlobalParameter().basefolder + "/" + self.projectName + "_DEAnalysis/" + self.rnaseq_assembler + "_" +  self.sampleGroupFile + "_" + self.readType + "/" + "edgeR/"
+			resultFolder = os.path.join(os.getcwd(), self.project_name,
+										"deNovoDEA",
+										"DEAnalysis",
+										self.dea_method + "_" + self.rnaseq_assembler + "_" +  self.result_tag +"/")
+
+			if all([self.read_library_type == "pe", self.organism_domain == "prokaryote", self.rnaseq_assembler == "rockhopper",
+					self.dea_method == "deseq2"]):
+				return {'out1': luigi.LocalTarget(resultFolder + self.report_name + "/" + "index.html")}
+
+			if all([self.read_library_type == "se", self.organism_domain == "prokaryote", self.rnaseq_assembler == "rockhopper",
+					self.dea_method == "deseq2"]):
+				return {'out1': luigi.LocalTarget(resultFolder + self.report_name + "/" + "index.html")}
+
+			if all([self.read_library_type == "pe", self.organism_domain == "eukaryote", self.rnaseq_assembler == "trinity",
+					self.dea_method == "deseq2"]):
+				return {'out1': luigi.LocalTarget(resultFolder + self.report_name + "/" + "index.html")}
+
+			if all([self.read_library_type == "se", self.organism_domain == "eukaryote", self.rnaseq_assembler == "trinity",
+					self.dea_method == "deseq2"]):
+				return {'out1': luigi.LocalTarget(resultFolder + self.report_name + "/" + "index.html")}
+
+			if all([self.read_library_type == "pe", self.organism_domain == "eukaryote", self.rnaseq_assembler == "spades",
+					self.dea_method == "deseq2"]):
+				return {'out1': luigi.LocalTarget(resultFolder + self.report_name + "/" + "index.html")}
+
+			if all([self.read_library_type == "se", self.organism_domain == "eukaryote", self.rnaseq_assembler == "spades",
+					self.dea_method == "deseq2"]):
+				return {'out1': luigi.LocalTarget(resultFolder + self.report_name + "/" + "index.html")}
+
+
+			if all([self.read_library_type == "pe", self.organism_domain == "prokaryote", self.rnaseq_assembler == "rockhopper",
+					self.dea_method == "edger"]):
+				return {'out1': luigi.LocalTarget(resultFolder + self.report_name + "/" + "index.html")}
+
+			if all([self.read_library_type == "se", self.organism_domain == "prokaryote", self.rnaseq_assembler == "rockhopper",
+					self.dea_method == "edger"]):
+				return {'out1': luigi.LocalTarget(resultFolder + self.report_name + "/" + "index.html")}
+
+			if all([self.read_library_type == "pe", self.organism_domain == "eukaryote", self.rnaseq_assembler == "trinity",
+					self.dea_method == "edger"]):
+				return {'out1': luigi.LocalTarget(resultFolder + self.report_name + "/" + "index.html")}
+
+			if all([self.read_library_type == "se", self.organism_domain == "eukaryote", self.rnaseq_assembler == "trinity",
+					self.dea_method == "edger"]):
+				return {'out1': luigi.LocalTarget(resultFolder + self.report_name + "/" + "index.html")}
+
+			if all([self.read_library_type == "pe", self.organism_domain == "eukaryote", self.rnaseq_assembler == "spades",
+					self.dea_method == "edger"]):
+				return {'out1': luigi.LocalTarget(resultFolder + self.report_name + "/" + "index.html")}
+
+			if all([self.read_library_type == "se", self.organism_domain == "eukaryote", self.rnaseq_assembler == "spades",
+					self.dea_method == "edger"]):
+				return {'out1': luigi.LocalTarget(resultFolder + self.report_name + "/" + "index.html")}
+
+
+		def run(self):
+			resultFolder = os.path.join(os.getcwd(), self.project_name,
+										"deNovoDEA",
+										"DEAnalysis",
+										self.dea_method + "_" + self.rnaseq_assembler + "_" +  self.result_tag +"/")
+			corset_folder = os.path.join(os.getcwd(), self.project_name,"deNovoDEA", "ReadQuant",
+									 self.rnaseq_assembler, "Corset" + "/")
+
+			target_file = os.path.join(os.getcwd(),"config","target.tsv")
+			rmd_DESeq2File = os.path.expanduser(os.path.join(('~'), 'scriptome','tasks','utility',"PlotDESEQ2.Rmd"))
+			rmd_edgeRFile = os.path.expanduser(os.path.join(('~'), 'scriptome', 'tasks', 'utility', "PlotEDGER.Rmd"))
+
+			cmd_run_corset_deseq = "[ -d  {resultFolder} ] || mkdir -p {resultFolder}; " \
+							  "cd {resultFolder};" \
+							  "corset_DESeq2.r " \
+							  "-t {target_file} " \
+							  "-q {corset_folder}counts.txt " \
+							   "-v {factor_of_intrest} " \
+							   "-c {reference_condition} " \
+							   "-f {fit_type} " \
+							   "-a {alpha} " \
+							   "-p {p_adjust_method} " \
+							   "-l {size_factor} " \
+								   "-T {rmd_DESeq2File}" \
+							.format(resultFolder=resultFolder,
+									target_file=target_file,
+									corset_folder=corset_folder,
+									factor_of_intrest=self.factor_of_intrest,
+									reference_condition=self.reference_condition,
+									fit_type=self.fit_type,
+									alpha=self.alpha,
+									p_adjust_method=self.p_adjust_method,
+									size_factor=self.size_factor,
+									rmd_DESeq2File=rmd_DESeq2File)
+
+			cmd_run_corset_edger = "[ -d  {resultFolder} ] || mkdir -p {resultFolder}; " \
+								   "cd {resultFolder};" \
+								   "corset_edgeR.r " \
+								   "-t {target_file} " \
+								   "-q {corset_folder}counts.txt " \
+								   "-v {factor_of_intrest} " \
+								   "-c {reference_condition} " \
+								   "-f {fit_type} " \
+								   "-a {alpha} " \
+								   "-p {p_adjust_method} " \
+								   "-l {size_factor} " \
+								   "-T {rmd_edgeRFile}" \
+				.format(resultFolder=resultFolder,
+						target_file=target_file,
+						corset_folder=corset_folder,
+						factor_of_intrest=self.factor_of_intrest,
+						reference_condition=self.reference_condition,
+						fit_type=self.fit_type,
+						alpha=self.alpha,
+						p_adjust_method=self.p_adjust_method,
+						size_factor=self.size_factor,
+						rmd_edgeRFile=rmd_edgeRFile)
+
+			if all([self.read_library_type == "pe", self.organism_domain == "prokaryote", self.rnaseq_assembler == "rockhopper",
+					self.dea_method == "deseq2"]):
+				print("****** NOW RUNNING COMMAND ******: " + cmd_run_corset_deseq)
+				print (run_cmd(cmd_run_corset_deseq))
+
+			if all([self.read_library_type == "se", self.organism_domain == "prokaryote", self.rnaseq_assembler == "rockhopper",
+					self.dea_method == "deseq2"]):
+				print("****** NOW RUNNING COMMAND ******: " + cmd_run_corset_deseq)
+				print (run_cmd(cmd_run_corset_deseq))
+
+			if all([self.read_library_type == "pe", self.organism_domain == "eukaryote", self.rnaseq_assembler == "trinity",
+					self.dea_method == "deseq2"]):
+				print("****** NOW RUNNING COMMAND ******: " + cmd_run_corset_deseq)
+				print (run_cmd(cmd_run_corset_deseq))
+
+			if all([self.read_library_type == "se", self.organism_domain == "eukaryote", self.rnaseq_assembler == "trinity",
+					self.dea_method == "deseq2"]):
+				print("****** NOW RUNNING COMMAND ******: " + cmd_run_corset_deseq)
+				print (run_cmd(cmd_run_corset_deseq))
+
+			if all([self.read_library_type == "pe", self.organism_domain == "eukaryote", self.rnaseq_assembler == "spades",
+					self.dea_method == "deseq2"]):
+				print("****** NOW RUNNING COMMAND ******: " + cmd_run_corset_deseq)
+				print (run_cmd(cmd_run_corset_deseq))
+
+			if all([self.read_library_type == "se", self.organism_domain == "eukaryote", self.rnaseq_assembler == "spades",
+					self.dea_method == "deseq2"]):
+				print("****** NOW RUNNING COMMAND ******: " + cmd_run_corset_deseq)
+				print (run_cmd(cmd_run_corset_deseq))
+
+	##############################################################################################################
+	#Run EDGER
+			if all([self.read_library_type == "pe", self.organism_domain == "prokaryote", self.rnaseq_assembler == "rockhopper",
+					self.dea_method == "edger"]):
+				print("****** NOW RUNNING COMMAND ******: " + cmd_run_corset_edger)
+				print (run_cmd(cmd_run_corset_edger))
+
+			if all([self.read_library_type == "se", self.organism_domain == "prokaryote", self.rnaseq_assembler == "rockhopper",
+					self.dea_method == "edger"]):
+				print("****** NOW RUNNING COMMAND ******: " + cmd_run_corset_edger)
+				print (run_cmd(cmd_run_corset_edger))
+
+			if all([self.read_library_type == "pe", self.organism_domain == "eukaryote", self.rnaseq_assembler == "trinity",
+					self.dea_method == "edger"]):
+				print("****** NOW RUNNING COMMAND ******: " + cmd_run_corset_edger)
+				print (run_cmd(cmd_run_corset_edger))
+
+			if all([self.read_library_type == "se", self.organism_domain == "eukaryote", self.rnaseq_assembler == "trinity",
+					self.dea_method == "edger"]):
+				print("****** NOW RUNNING COMMAND ******: " + cmd_run_corset_edger)
+				print (run_cmd(cmd_run_corset_edger))
+
+			if all([self.read_library_type == "pe", self.organism_domain == "eukaryote", self.rnaseq_assembler == "spades",
+					self.dea_method == "edger"]):
+				print("****** NOW RUNNING COMMAND ******: " + cmd_run_corset_edger)
+				print (run_cmd(cmd_run_corset_edger))
+
+			if all([self.read_library_type == "se", self.organism_domain == "eukaryote", self.rnaseq_assembler == "spades",
+					self.dea_method == "edger"]):
+				print("****** NOW RUNNING COMMAND ******: " + cmd_run_corset_edger)
+				print (run_cmd(cmd_run_corset_edger))
