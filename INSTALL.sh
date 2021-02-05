@@ -29,7 +29,7 @@ spinner()
 
 # Name of application to install
         echo ""
-echo -e "\e[1;34mChecking dependencies for RNASeqPIPE installation ...\e[0m"  
+echo -e "\e[1;34mChecking dependencies for STlab RNASeq Pipeline (STARP) installation ...\e[0m"  
 echo ""
 
 sleep 2s;
@@ -171,7 +171,7 @@ if [ ! -d $PREFIX ]; then
 fi
     
 
-AppName="RNASeqPIPE"
+AppName="STRAP"
 # Set your project's install directory name here
 InstallDir=$PREFIX
 #EntryPoint="YourApplicationName"
@@ -264,62 +264,44 @@ fi
 #fi
 # Modified on 29 January 2021
 
-if [[ $EntryPoint ]]; then
-    cd $InstallDir
-    wget 'https://codeload.github.com/grimbough/rhdf5/zip/master' --output-document 'rhdf5.zip' >> /dev/null 2>&1
-    unzip rhdf5.zip
-    rm rhdf5.zip
-    rhdf5_dir="$InstallDir/rhdf5-master"
-fi
 
 
 #######
 InstallDir=$PREFIX
-if [[ $EntryPoint ]]; then
-   cd $InstallDir
-   echo -e `date` "\e[1;34m\tDownloading Salmon v1.3.0 \e[0m"
-   echo -e "\n"
-   (wget https://github.com/COMBINE-lab/salmon/releases/download/v1.3.0/salmon-1.3.0_linux_x86_64.tar.gz >> /dev/null 2>&1) & 
-   spinner $!
-   echo -e "\n"
-   echo -e `date`  "\e[1;34m\tSalmon v1.3.0 Downloaded..\e[0m"
-   echo -e "\n"
-   tar -xvzf salmon-1.3.0_linux_x86_64.tar.gz >> /dev/null 2>&1
-   mv salmon-latest_linux_x86_64/ salmon_130
-   echo "export PATH=\"$InstallDir/salmon_130/bin\":\$PATH" >> ~/.bashrc
-
-   ln -s $InstallDir/salmon_130/lib/liblzma.so.0  $InstallDir/lib/liblzma.so.0
-   #ln -s $InstallDir/salmon_130/lib/libm.so.6  $InstallDir/lib/libm.so.6
-   ln -s $InstallDir/salmon_130/lib/libtbbmalloc_proxy.so  $InstallDir/lib/libtbbmalloc_proxy.so
-   ln -s $InstallDir/salmon_130/lib/libtbbmalloc_proxy.so.2  $InstallDir/lib/libtbbmalloc_proxy.so.2
-   ln -s $InstallDir/salmon_130/lib/libtbbmalloc.so  $InstallDir/lib/libtbbmalloc.so
-   ln -s $InstallDir/salmon_130/lib/libtbb.so.2  $InstallDir/lib/libtbb.so.2  
-fi
+cd $InstallDir
+echo -e `date` "\e[1;34m\tDownloading Salmon v1.4.0 \e[0m"
+echo -e "\n"
+wget https://github.com/COMBINE-lab/salmon/releases/download/v1.4.0/salmon-1.4.0_linux_x86_64.tar.gz
+echo -e "\n"
+echo -e `date`  "\e[1;34m\tSalmon v1.4.0 Downloaded..\e[0m"
+echo -e "\n"
+tar -xvzf salmon-1.4.0_linux_x86_64.tar.gz >> /dev/null 2>&1
+mv salmon-latest_linux_x86_64/ salmon_140
+rm salmon-1.4.0_linux_x86_64.tar.gz
+echo "export PATH=\"$InstallDir/salmon_140/bin\":\$PATH" >> ~/.bashrc
+ln -s $InstallDir/salmon_140/lib/liblzma.so.0  $InstallDir/lib/liblzma.so.0
+ln -s $InstallDir/salmon_140/lib/libtbbmalloc_proxy.so  $InstallDir/lib/libtbbmalloc_proxy.so
+ln -s $InstallDir/salmon_140/lib/libtbbmalloc_proxy.so.2  $InstallDir/lib/libtbbmalloc_proxy.so.2
+ln -s $InstallDir/salmon_140/lib/libtbbmalloc.so  $InstallDir/lib/libtbbmalloc.so
+ln -s $InstallDir/salmon_140/lib/libtbb.so.2  $InstallDir/lib/libtbb.so.2
 #######
 
 echo -e `date`  "\e[1;34m\tCreating 'base' environment and Installing\e[0m"
-declare -a list=(r-base bioconductor-delayedarray python=3.7 dart psutil libgcc imagemagick libcxx zlib libxml2 libcurl libopenblas libtool curl bzip2 wget luigi pandas numpy scipy biopython perl-bioperl star  bbmap  qualimap hisat2 bowtie2 segemehl subread kallisto samtools corset lace gffread r-devtools bioconductor-summarizedexperiment  bioconductor-biocparallel bioconductor-enhancedvolcano bioconductor-genomicranges r-rcppparallel bioconductor-s4vectors bioconductor-deseq2 bioconductor-rhdf5 bioconductor-rhdf5lib r-optparse bioconductor-edger bioconductor-tximport bioconductor-genomicfeatures bioconductor-regionreport bioconductor-deformats bioconductor-plyranges r-pheatmap r-colorspace r-rcolorbrewer r-optparse r-dt r-gplots r-ggplot2 r-stringr r-tidyr r-dplyr r-rcpp r-rcpparmadillo r-readr pandoc) 
+declare -a list=(python=3.8 pandoc psutil libiconv libgcc imagemagick libcxx zlib libxml2 libcurl libopenblas libtool curl bzip2 wget luigi pandas scipy biopython perl-bioperl bbmap qualimap subread hisat2 bowtie2 segemehl subread star corset lace kallisto samtools gffread r-base r-devtools r-rcppparallel r-optparse r-pheatmap r-gplots r-ggplot2 r-tidyr r-rcpparmadillo r-readr bioconductor-deseq2 bioconductor-delayedarray bioconductor-summarizedexperiment bioconductor-enhancedvolcano bioconductor-rhdf5 bioconductor-rhdf5filters bioconductor-rhdf5lib bioconductor-edger bioconductor-tximport bioconductor-genomicfeatures bioconductor-regionreport bioconductor-deformats bioconductor-plyranges)
     for package in "${list[@]}";
 	    do
   		#echo -e "\e[1;36m \t\t\t\tinstalling $package\e[0m"
         # 
         echo -e `date` "\e[1;36m \t\t\t\tinstalling $package\e[0m"
         echo -e  "\e[1;34mPlease Wait ...\e[0m"
-	conda config --set ssl_verify no
+        conda config --set ssl_verify no
         conda install -y -c conda-forge -c bioconda -c defaults -c statiskit -c r $package
 
         #(conda install -y -c anaconda -c conda-forge -c bioconda -c defaults -c statiskit -c r $package >> /dev/null 2>&1) &
         #spinner $!
         echo -e "\n"
         done
-
-echo -e `date` "\tInstalling RHDF5 Library"
-(echo "devtools::install('$rhdf5_dir')" | $InstallDir/bin/R --no-save >> /dev/null 2>&1) &
-spinner $!
-echo -e "\n"
-echo -e `date`  "\e[1;34m\tRHDF5 Library Installed..\e[0m"
-echo -e "\n"
-
+echo "BiocManager::install(\"GenomeInfoDb\")" | $InstallDir/bin/R --no-save
 echo -e `date` "\tInstalling rnaseqdea Scripts for Expression Analysis"
 echo "devtools::install('$dea_scripts_dir')" | $InstallDir/bin/R --no-save 
 echo -e "\n"
@@ -329,6 +311,7 @@ echo -e "\n"
 ln -s $InstallDir/lib/R/modules/lapack.so  $InstallDir/lib/libRlapack.so
 ln -s $InstallDir/lib/libblas.so  $InstallDir/lib/libRblas.so
 ######
+echo -e `date`  "\e[1;34m\tDownloading and Installing Trinity...Please Wait\e[0m"
 InstallDir=$PREFIX
 if [[ $EntryPoint ]]; then
    cd $InstallDir
@@ -342,7 +325,31 @@ if [[ $EntryPoint ]]; then
    echo "export PATH=\"$InstallDir/trinityrnaseq\":\$PATH" >> ~/.bashrc
    echo "export TRINITY_HOME=$InstallDir/trinityrnaseq" >> ~/.bashrc
 fi
+echo -e `date`  "\e[1;34m\tTrinity Installed Wait\e[0m"
 #####
+echo -e `date`  "\e[1;34m\tDownloading and Installing Rockhopper...Please Wait\e[0m"
+InstallDir=$PREFIX
+if [[ $EntryPoint ]]; then
+   cd $InstallDir/bin
+   (wget https://cs.wellesley.edu/~btjaden/Rockhopper/download/current/Rockhopper.jar  >> /dev/null 2>&1) & 
+   spinner $!
+   chmod +x $InstallDir/bin/Rockhopper.jar
+fi
+echo -e `date`  "\e[1;34m\Rockhopper Installed\e[0m"
+#####
+
+if [[ $EntryPoint ]]; then
+    cd $InstallDir
+    wget 'https://codeload.github.com/grimbough/rhdf5/zip/master' --output-document 'rhdf5.zip' >> /dev/null 2>&1
+    unzip rhdf5.zip
+    rm rhdf5.zip
+    rhdf5_dir="$InstallDir/rhdf5-master"
+fi
+echo -e `date` "\tInstalling RHDF5 Library"
+echo "devtools::install('$rhdf5_dir')" | $InstallDir/bin/R --no-save 
+echo -e "\n"
+echo -e `date`  "\e[1;34m\tRHDF5 Library Installed..\e[0m"
+echo -e "\n"
 
 source $InstallDir/etc/profile.d/conda.sh
 $InstallDir/bin/conda init bash
