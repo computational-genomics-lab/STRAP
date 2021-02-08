@@ -7,11 +7,13 @@ To provide an easier way to install, we provide a miniconda based installer.
 Installation also requires **pre-instaled** ``git``, ``gcc``, ``cpp`` and ``zlib1g-dev``.
   
     git clone https://github.com/computational-genomics-lab/STRAP.git
-    cd STRAP
+    cd STRAP-main
     chmod 755 INSTALL.sh
     ./INSTALL.sh
 
     
+Installation will create a directory named STRAP.
+
 **Post Installation Instructions**
 After successful installation, close the current terminal. 
 In a new terminal. source the bashrc file:  ``source ~/.bashrc``
