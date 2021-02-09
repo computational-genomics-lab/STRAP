@@ -11,6 +11,7 @@ Installation also requires **pre-instaled** ``git``, ``gcc``, ``cpp`` and ``zlib
     chmod 755 INSTALL.sh
     ./INSTALL.sh
 
+[github may not always behave well with pull command especially with the latest ubuntu version. In that case, try getting the package as direct download. In those cases your base directory name may change]
     
 Installation will create a directory named STRAP.
 
@@ -105,9 +106,9 @@ Usage:  projectConfig.py -h
     mandatory arguments         Description
     
     -i      --inputDir          Path to Directory containing raw RNASeq reads, annotation file (gff / gtf), genome and (or) 
-                                transcriptome FASTA file
+                                transcriptome FASTA file. Make sure all the input files are located here.
                                 type: string
-                                Example: $HOME/bulkRNASeqPIPE/sample_data/mastigocladus
+                                Example: $HOME/STRAP-main/sample_data/mastigocladus
 
     -r      --readType          RNASeq read type 
                                 type: string
@@ -120,6 +121,7 @@ Usage:  projectConfig.py -h
     
     Optional arguments
     ------------------
+    
     -p     --projectDir         Name of the Project Directory to be created
                                 Must not contain blank spaces and (or) special characters
                                 type: string
@@ -143,39 +145,56 @@ Usage:  projectConfig.py -h
     
 
 **Run Example**
-
+You can launch a run for projectConfig.py using the following commandline:
+    
     mkdir RNASeq-Analysis
     cd RNASeq-Analysis
    
-    [RNASeq-Analysis]$ projectConfig.py  -i /path/to/bulkRNASeqPIPE/sample_data/ \
-                      -r paired \
-                      -d prokaryote \
-                      -p halomicronema \
-                      -o halomicronema_symlink
- 
-    Running the prepareProject.py script with the above 4 required parameters asks for the individual file types present inside the inputData folder.
+    [RNASeq-Analysis]$ projectConfig.py -i /storage/DATA/annotatedData/74/genecall/RNAseq_74_all/heatshock -p testDir -r pe -d prokaryote -g yes -o 74Testsymlink -e tsucheta@gmail.com
 
-    User has to choose  [pe:   paired end
-                        se:   single end
-                        geno: genome fasta file
-                        tran: transcriptome fasta file
-                        anot: annotation file
-                        ex:   exclude file from analysis
-                        ]
 
+Make sure your input directory contains all the data including the RNAseq files, genome fasta file and annotation file. Once this commandline is executed, the script is going to iterate over the files in the directory and asks for user input such as whether the read type is pe, genome or annotation type or if the user wants to exclude the files from data analysis. The workflow takes 2 conditions at a time and generates conditions based on the file pre-fixes. In case, the file name pre-fixes are in-correct, then one needs to fix it at this time. Also make sure you are not including more than one condition. In that case, the program will exit with error.
 
 **Output**
 
     Successful run of the projectConfig.py script with appropriate parameters will generate 
 
     1. Luigi Configuration file ``luigi.cfg`` in the parent folder
+    
+    luigi.cfg file looks something like this:
+    [core]
+
+	default-scheduler-port:8082
+	error-email=tsucheta@gmail.com
+
+	[GlobalParameter]
+	project_name=/home/sutripa/STRAP-main/testDir/
+	adapter=/home/sutripa/STRAP-main/tasks/utility/adapters.fasta.gz
+	domain=prokaryote
+	feature_type=CDS
+	genome_dir=/home/sutripa/STRAP-main/raw_data_symlink/geno/
+	genome_name=MLA_UU774
+	genome_suffix=fna
+	read_suffix=fastq.gz
+	rnaseq_dir=/home/sutripa/STRAP-main/raw_data_symlink/pe/
+	read_library_type=pe
+	transcriptome_dir=/home/sutripa/STRAP-main/raw_data_symlink/tran/
+	transcriptome_name=MLA_UU774
+	transcriptome_suffix=ffn
+	annotation_dir=/home/sutripa/STRAP-main/raw_data_symlink/anot/
+	annotation_name=MLA_UU774
+	annotation_suffix=gff
+	prokka_gff=yes
+	threads=31
+	maxMemory=371
+
        
       Edit the luigi.cfg file if required.
       
       Note:
-      It is mandatory to provide the path of the adapter file (default location: bulkRNASeqPipe/tasks/utility/adapter.fastq.gz)
+      It is mandatory to provide the path of the adapter file (default location: STRAP-main/tasks/utility/adapter.fastq.gz)
 
-    2. a project folder in the name of ``halomicronema`` containing three files
+    2. a project folder in the name of ``testDir`` is created and it contains no files 
 
     3. a configuration folder in the name of config containing 3 files   
 
