@@ -175,7 +175,7 @@ AppName="STRAP"
 # Set your project's install directory name here
 InstallDir=$PREFIX
 #EntryPoint="YourApplicationName"
-EntryPoint="RNASeqPIPE"
+EntryPoint="STRAP"
 
 echo "Installing $AppName"  
 
