@@ -368,7 +368,7 @@ Quantification of the transcripts can be done using command ``alignmentFreeQuant
                                      If no, quality control analysis will not be done, instead re-pair.sh or reformat.sh 
                                      script of bbmap will be run based on paired-end or single-end reads.
 
-    --quantMethod            str       Read quantification method
+    --quant-method         str       Read quantification method
                                       [salmon / kallisto]
     --local-scheduler
 
@@ -379,9 +379,8 @@ Quantification of the transcripts can be done using command ``alignmentFreeQuant
   2.  with read quantification method: salmon
 
     [RNASeq-Analysis]$ rnaseq.py  alignmentFreeQuant  --pre-process-reads no \
-                                   --quantMethod salmon \
+                                   --quant-method salmon \
                                    --local-scheduler
-
 
   **Example Run 2**
   **quantifyTranscripts** 
@@ -390,7 +389,7 @@ Quantification of the transcripts can be done using command ``alignmentFreeQuant
   2.  with read quantification method ``kallisto``
 
     [RNASeq-Analysis]$ rnaseq.py  alignmentFreeQuant  --pre-process-reads  no \
-                                   --quantMethod kallisto` \
+                                   --quant-method kallisto` \
                                    --local-scheduler
 
 
