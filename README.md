@@ -357,7 +357,7 @@ Quantification of the transcripts can be done using command ``alignmentFreeQuant
 
 .. code-block:: none   
 
-    [RNASeq-Analysis]$ rnaseq-wf.py alignmentFreeQuant <arguments> --local-scheduler
+    [RNASeq-Analysis]$ rnaseq.py alignmentFreeQuant <arguments> --local-scheduler
 
     argument               type      Description
 
@@ -375,22 +375,22 @@ Quantification of the transcripts can be done using command ``alignmentFreeQuant
 
 **Example Run 1**
   **quantifyTranscripts** 
-  1.  with out read quality control analysis  ``--pre-process-reads no``
-  2.  with read quantification method ``salmon``
+  1.  with out read quality control analysis  --pre-process-reads no
+  2.  with read quantification method: salmon
 
-    [RNASeq-Analysis]$ rnaseq.py  alignmentFreeQuant  --pre-process-reads  ``no`` \
-                                   --quantMethod ``salmon`` \
+    [RNASeq-Analysis]$ rnaseq.py  alignmentFreeQuant  --pre-process-reads no \
+                                   --quantMethod salmon \
                                    --local-scheduler
 
 
   **Example Run 2**
   **quantifyTranscripts** 
 
-  1.  with out read quality control analysis  ``--pre-process-reads no``
+  1.  with out read quality control analysis:  --pre-process-reads no
   2.  with read quantification method ``kallisto``
 
-    [RNASeq-Analysis]$ rnaseq.py  alignmentFreeQuant  --pre-process-reads  ``no`` \
-                                   --quantMethod ``kallisto`` \
+    [RNASeq-Analysis]$ rnaseq.py  alignmentFreeQuant  --pre-process-reads  no \
+                                   --quantMethod kallisto` \
                                    --local-scheduler
 
 
