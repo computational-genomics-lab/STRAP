@@ -251,7 +251,7 @@ rnaseq.py <command> - -help
 
 **3. Raw samples quality control**
 ------------------------------
-Quality control analysis of the raw samples can be done using command ``preProcessSamples``
+Quality control analysis of the raw samples can be done using command ``cleanReads``
 
   **Requirements**
   
