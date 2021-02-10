@@ -259,7 +259,7 @@ Quality control analysis of the raw samples can be done using command ``preProce
     2. Availability of ``luigi.cfg`` file in ``parent folder`` and ``pe_samples.lst`` inside the ``config``.
                                  
 
-    [RNASeq-Analysis]$ rnaseq-wf.py cleanReads <arguments> --local-scheduler
+    [RNASeq-Analysis]$ rnaseq.py cleanReads <arguments> --local-scheduler
     
     arguments               type      Description
       
