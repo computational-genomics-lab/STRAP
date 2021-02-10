@@ -100,8 +100,10 @@ THIS_PATH="$THIS_DIR/$THIS_FILE"
 #PREFIX=$THIS_DIR/tools 
 #modified on 29 Jan 2021
 
+AppName="STRAP"
+# Set your project's install directory name here
 HOME_DIR=$HOME
-PREFIX=$HOME_DIR/STRAP
+PREFIX=$HOME_DIR/$AppName
 
 sleep 2s;
 
@@ -128,7 +130,9 @@ echo -e "Available Memory:\t  $(( ${availableM} )) MB OR $(( ${availableM} / 102
 echo -e "\e[1;34m_________________________________________________________________________________\e[0m"  2>&1 | tee -a $LOGFILE
 echo -e "\n"
 echo -e "Hello "$USER,"" 
-    printf "\nInstallation RNASeq-Pipe requires at least 5gb free disk space.\\nIf you do not have sufficient disc space, Press CTRL-C to abort the installation.\\nThird Party tools for $AppName will be installed at:\t $InstallDir"    printf "\\n"  2>&1 | tee -a $LOGFILE
+    printf "\nInstallation RNASeq-Pipe requires at least 5gb free disk space.\\n"
+    printf "If you do not have sufficient disc space, Press CTRL-C to abort the installation.\\n"
+    printf "Third Party tools for $AppName will be installed at:\t $InstallDir"    printf "\\n"  2>&1 | tee -a $LOGFILE
     printf "%s\\n" "$PREFIX"  2>&1 | tee -a $LOGFILE
     printf "\\n"  2>&1 | tee -a $LOGFILE
     printf "  - Press ENTER to confirm the location\\n"  
@@ -171,7 +175,7 @@ if [ ! -d $PREFIX ]; then
 fi
     
 
-AppName="STRAP"
+
 # Set your project's install directory name here
 InstallDir=$PREFIX
 #EntryPoint="YourApplicationName"
