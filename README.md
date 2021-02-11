@@ -251,11 +251,11 @@ rnaseq.py <command> - -help
 
 **3. Raw samples quality control**
 ------------------------------
-Quality control analysis of the raw samples can be done using command ``cleanReads``
+Quality control analysis of the raw samples can be done using command ``clearReads``
 
   **Requirements**
   
-    1. Execution of prepareProject.py command 
+    1. prepareProject.py should have been first run  prior to running this module 
     2. Availability of ``luigi.cfg`` file in ``parent folder`` and ``pe_samples.lst`` inside the ``config``.
                                  
 
@@ -368,28 +368,29 @@ Quantification of the transcripts can be done using command ``alignmentFreeQuant
                                      If no, quality control analysis will not be done, instead re-pair.sh or reformat.sh 
                                      script of bbmap will be run based on paired-end or single-end reads.
 
-    --quant-method         str       Read quantification method
+    --quant-method            str       Read quantification method
                                       [salmon / kallisto]
     --local-scheduler
 
 
 **Example Run 1**
   **quantifyTranscripts** 
-  1.  with out read quality control analysis  --pre-process-reads no
-  2.  with read quantification method: salmon
+  1.  with out read quality control analysis  ``--pre-process-reads no``
+  2.  with read quantification method ``salmon``
 
-    [RNASeq-Analysis]$ rnaseq.py  alignmentFreeQuant  --pre-process-reads no \
+    [RNASeq-Analysis]$ rnaseq.py  alignmentFreeQuant  --pre-process-reads  no \
                                    --quant-method salmon \
                                    --local-scheduler
+
 
   **Example Run 2**
   **quantifyTranscripts** 
 
-  1.  with out read quality control analysis:  --pre-process-reads no
+  1.  with out read quality control analysis  ``--pre-process-reads no``
   2.  with read quantification method ``kallisto``
 
     [RNASeq-Analysis]$ rnaseq.py  alignmentFreeQuant  --pre-process-reads  no \
-                                   --quant-method kallisto` \
+                                   --quant-method kallisto \
                                    --local-scheduler
 
 
@@ -455,7 +456,7 @@ Quantification of the transcripts can be done using command ``alignmentFreeQuant
 **Example Run**
 **Alignment Free Differential Expression Analysis**
 
-      [RNASeq-Analysis]$ python rnaseq.py alignmentFreeDEA \
+      [RNASeq-Analysis]$ rnaseq.py alignmentFreeDEA \
                                 --pre-process-reads no \
                                 --dea-method deseq2 \
                                 --reference-condition control \
