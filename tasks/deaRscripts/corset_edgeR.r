@@ -12,7 +12,7 @@ suppressMessages(library(edgeR))
 suppressMessages(library(DT))
 suppressMessages(library(ggplot2))
 suppressMessages(library(gplots))
-suppressMessages(library(EnhancedVolcano))
+#suppressMessages(library(EnhancedVolcano))
 suppressMessages(library(tximport))
 suppressMessages(library(GenomicFeatures))
 suppressMessages(library(regionReport))
@@ -44,9 +44,9 @@ make_option(c("-t", "--targetFile"),
 			dest="targetFile",
 			help="path to the design/target file [default: %default]."),
 
-make_option(c("-T", "--templateFile"),
-			dest="templateFile",
-			help="path to the R markdown Template file"),
+#make_option(c("-T", "--templateFile"),
+#			dest="templateFile",
+#			help="path to the R markdown Template file"),
 
 
 make_option(c("-q", "--corsetQuant"),
@@ -137,7 +137,7 @@ workDir <- getwd()
 projectName <- opt$projectName 
 reportName <-opt$reportName                      # name of the project
 targetFile <- opt$targetFile    
-templateFile <- opt$templateFile               # path to the design/target file   
+#templateFile <- opt$templateFile               # path to the design/target file   
 corsetQuant <- opt$corsetQuant                             # path to the directory containing salmon quantification files
 varInt <- opt$varInt                                 # factor of interest
 condRef <- opt$condRef                               # reference biological condition
@@ -213,7 +213,8 @@ exportResults.edgeR(out.edgeR, group=target[,varInt], counts=countData, alpha=al
 save.image(file=paste0(reportName, ".RData"))
 
 
-report <- edgeReport(dge, lrt, projectName, intgroup, outdir = reportName,  output = 'index', nBest = 50000, nBestFeatures = 20, template = templateFile)
+report <- edgeReport(dge, lrt, projectName, intgroup, outdir = reportName,  output = 'index', nBest = 50000, nBestFeatures = 20)
+#report <- edgeReport(dge, lrt, projectName, intgroup, outdir = reportName,  output = 'index', nBest = 50000, nBestFeatures = 20, template = templateFile)
 
 
 if(interactive()) {
