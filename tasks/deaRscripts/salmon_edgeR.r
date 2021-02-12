@@ -107,7 +107,7 @@ workDir <- getwd()
 projectName <- opt$projectName  
 reportName <- opt$reportName                     # name of the project
 targetFile <- opt$targetFile  
-templateFile <-opt$templateFile                       # path to the design/target file
+#templateFile <-opt$templateFile                       # path to the design/target file
 quantDir <- opt$quantDir							 # path to the directory containing raw counts files
 tx2geneDirectory <- opt$tx2geneDirectory			 
 varInt <- opt$varInt                                 # factor of interest
