@@ -127,8 +127,7 @@ class alignmentBasedDEA(luigi.Task):
 										"-a {alpha} " \
 										"-p {p_adjust_method} " \
 										"-l {size_factor} " \
-										"-T $(which PlotDESEQ2.Rmd)" \
-											.format(target_file=target_file,
+										.format(target_file=target_file,
 													resultFolder=resultFolder,
 													QuantFolder=QuantFolder,
 													factor_of_intrest=self.factor_of_intrest,
@@ -149,8 +148,7 @@ class alignmentBasedDEA(luigi.Task):
 									  "-a {alpha} " \
 									  "-p {p_adjust_method} " \
 									  "-l {size_factor} " \
-									  "-T $(which PlotEDGER.Rmd)" \
-			.format(resultFolder=resultFolder,
+									 .format(resultFolder=resultFolder,
 					target_file=target_file,
 					QuantFolder=QuantFolder,
 					factor_of_intrest=self.factor_of_intrest,
