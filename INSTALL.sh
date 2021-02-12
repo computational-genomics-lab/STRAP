@@ -291,7 +291,7 @@ ln -s $InstallDir/salmon_140/lib/libtbb.so.2  $InstallDir/lib/libtbb.so.2
 #######
 
 echo -e `date`  "\e[1;34m\tCreating 'base' environment and Installing\e[0m"
-declare -a list=(python=3.8 pandoc psutil libiconv libgcc imagemagick libcxx zlib libxml2 libcurl libopenblas libtool curl bzip2 wget luigi pandas scipy biopython perl-bioperl fastqc bbmap qualimap subread hisat2 bowtie2 segemehl subread star corset lace kallisto samtools gffread r-base r-devtools r-rcppparallel r-optparse r-pheatmap r-gplots r-ggplot2 r-tidyr r-rcpparmadillo r-readr bioconductor-deseq2 bioconductor-genomeinfodb bioconductor-delayedarray bioconductor-summarizedexperiment bioconductor-enhancedvolcano bioconductor-rhdf5 bioconductor-rhdf5filters bioconductor-rhdf5lib bioconductor-edger bioconductor-tximport bioconductor-genomicfeatures bioconductor-regionreport bioconductor-deformats bioconductor-plyranges)
+declare -a list=(python=3.8 pandoc psutil libiconv libgcc imagemagick libcxx zlib libxml2 libcurl libopenblas libtool curl bzip2 wget luigi pandas scipy biopython perl-bioperl fastqc bbmap qualimap subread hisat2 bowtie2 segemehl subread star corset lace kallisto gffread r-base r-devtools r-rcppparallel r-optparse r-pheatmap r-gplots r-ggplot2 r-tidyr r-rcpparmadillo r-readr bioconductor-deseq2 bioconductor-genomeinfodb bioconductor-delayedarray bioconductor-summarizedexperiment bioconductor-enhancedvolcano bioconductor-rhdf5 bioconductor-rhdf5filters bioconductor-rhdf5lib bioconductor-edger bioconductor-tximport bioconductor-genomicfeatures bioconductor-regionreport bioconductor-deformats bioconductor-plyranges samtools=1.11)
     for package in "${list[@]}";
 	    do
   		#echo -e "\e[1;36m \t\t\t\tinstalling $package\e[0m"
