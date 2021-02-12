@@ -11,7 +11,7 @@ suppressMessages(library(DESeq2))
 suppressMessages(library(DT))
 suppressMessages(library(ggplot2))
 suppressMessages(library(gplots))
-suppressMessages(library(EnhancedVolcano))
+#suppressMessages(library(EnhancedVolcano))
 suppressMessages(library(GenomicFeatures))
 suppressMessages(library(regionReport))
 suppressMessages(library(DEFormats))
@@ -47,9 +47,9 @@ make_option(c("-t", "--targetFile"),
 			dest="targetFile",
 			help="path to the design/target file [default: %default]."),
 
-make_option(c("-T", "--templateFile"),
-			dest="templateFile",
-			help="path to the R markdown Template file"),
+#make_option(c("-T", "--templateFile"),
+#			dest="templateFile",
+#			help="path to the R markdown Template file"),
 
 make_option(c("-G", "--tx2geneDirectory"),
 			dest="tx2geneDirectory",
@@ -132,7 +132,7 @@ workDir <- getwd()
 projectName <- opt$projectName 
 reportName <-opt$reportName                      # name of the project
 targetFile <- opt$targetFile 
-templateFile <- opt$templateFile                        # path to the design/target file   
+#templateFile <- opt$templateFile                        # path to the design/target file   
 tx2geneDirectory <- opt$tx2geneDirectory             # path to the tx2gene Directory
 quantDir <- opt$quantDir                             # path to the directory containing salmon quantification files
 varInt <- opt$varInt                                 # factor of interest
@@ -229,6 +229,7 @@ exportResults.DESeq2(out.DESeq2, group=unique(target[,varInt]), alpha=alpha)
 save.image(file=paste0(reportName, ".RData"))
 
 report <- DESeq2Report(dds, projectName, intgroup, outdir = reportName,  output = 'index', nBest = 50000, nBestFeatures = 20, template = templateFile)
+#report <- DESeq2Report(dds, projectName, intgroup, outdir = reportName,  output = 'index', nBest = 50000, nBestFeatures = 20, template = templateFile)
 
 if(interactive()) {
     browseURL(report)
