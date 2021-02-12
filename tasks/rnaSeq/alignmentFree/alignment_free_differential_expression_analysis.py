@@ -122,7 +122,6 @@ class alignmentFreeDEA(luigi.Task):
 									"-a {alpha} " \
 									"-p {p_adjust_method} " \
 									"-l {size_factor} " \
-									"-T $(which PlotDESEQ2.Rmd)" \
 				.format(resultFolder=resultFolder,
 						target_file=target_file,
 						transcriptQuantFolder=transcriptQuantFolder,
@@ -146,8 +145,7 @@ class alignmentFreeDEA(luigi.Task):
 									  "-a {alpha} " \
 									  "-p {p_adjust_method} " \
 									  "-l {size_factor} " \
-									  "-T $(which PlotDESEQ2.Rmd)" \
-				.format(resultFolder=resultFolder,
+						.format(resultFolder=resultFolder,
 						target_file=target_file,
 						transcriptQuantFolder=transcriptQuantFolder,
 						tx2genefolder=tx2genefolder,
@@ -168,7 +166,6 @@ class alignmentFreeDEA(luigi.Task):
 								   "-c {reference_condition} " \
 								   "-a {alpha} " \
 								   "-p {p_adjust_method} " \
-								   "-T $(which PlotEDGER.Rmd)" \
 				.format(resultFolder=resultFolder,
 						target_file=target_file,
 						transcriptQuantFolder=transcriptQuantFolder,
@@ -190,7 +187,6 @@ class alignmentFreeDEA(luigi.Task):
 									 "-c {reference_condition} " \
 									 "-a {alpha} " \
 									 "-p {p_adjust_method} " \
-									 "-T $(which PlotEDGER.Rmd)" \
 				.format(resultFolder=resultFolder,
 						target_file=target_file,
 						transcriptQuantFolder=transcriptQuantFolder,
