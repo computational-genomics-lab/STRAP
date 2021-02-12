@@ -20,7 +20,7 @@ After successful installation, close the current terminal.
 In a new terminal. source the bashrc file:  ``source ~/.bashrc``
 Activate ``gabtk`` environment using command: ``conda activate`` 
 
-All the third party tools installed using conda are available at $HOME/bulkRNASeqPIPE/ [default location]
+All the third party tools installed using conda are available at $HOME/STRAP/ [default location]
 or the user specified location during the installation process.
 
 The script to run RNASeq Analysis Pipeline is rnaseq.py is available inside the STRAP folder, that you cloned from github.
@@ -153,7 +153,7 @@ You can launch a run for projectConfig.py using the following commandline:
     [RNASeq-Analysis]$ projectConfig.py -i /storage/DATA/annotatedData/74/genecall/RNAseq_74_all/heatshock -p testDir -r pe -d prokaryote -g yes -o 74Testsymlink -e tsucheta@gmail.com
 
 
-Make sure your input directory contains all the data including the RNAseq files, genome fasta file and annotation file. Once this commandline is executed, the script is going to iterate over the files in the directory and asks for user input such as whether the read type is pe, genome or annotation type or if the user wants to exclude the files from data analysis. The workflow takes 2 conditions at a time and generates conditions based on the file pre-fixes. In case, the file name pre-fixes are in-correct, then one needs to fix it at this time. Also make sure you are not including more than one condition. In that case, the program will exit with error.
+Make sure your input directory contains all the data including the RNAseq files, genome fasta file and annotation file. Once this commandline is executed, the script is going to iterate over the files in the directory and asks for user input such as whether the read type is pe, genome or annotation type or if the user wants to exclude the files from data analysis. The workflow takes 2 conditions at a time and generates conditions based on the file pre-fixes. When providing conditions as input make sure to only provide alphanumeric characters. Providing a "-" or "_"  may not work. In case, the file name pre-fixes are in-correct, then one needs to fix it at this time. Also make sure you are not including more than one condition. In that case, the program will exit with error.
 
 **Output**
 
