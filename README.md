@@ -18,7 +18,7 @@ Installation will create a directory named STRAP.
 **Post Installation Instructions**
 After successful installation, close the current terminal. 
 In a new terminal. source the bashrc file:  ``source ~/.bashrc``
-Activate ``gabtk`` environment using command: ``conda activate`` 
+Activate ``STRAP`` environment using command: ``conda activate`` 
 
 All the third party tools installed using conda are available at $HOME/STRAP/ [default location]
 or the user specified location during the installation process.
