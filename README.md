@@ -149,6 +149,9 @@ You can launch a run for projectConfig.py using the following commandline:
     
     mkdir RNASeq-Analysis
     cd RNASeq-Analysis
+    
+    chmod 755 projectConfig.py   ### If Permission denied, give execute access to "projectConfig.py" in your directory 
+
    
     [RNASeq-Analysis]$ projectConfig.py -i /storage/DATA/annotatedData/74/genecall/RNAseq_74_all/heatshock -p testDir -r pe -d prokaryote -g yes -o 74Testsymlink -e tsucheta@gmail.com
 
@@ -244,6 +247,8 @@ rnaseq.py <command> - -help
 
     2. Run rawReadsQC
        [RNASeq-Analysis]$ rnaseq.py rawReadsQC --local-scheduler
+        
+                          chmod 755 rnaseq.py   ### If Permission denied, give execute access to "rnaseq.py" and fire the previous command line again.
 
       Successful execution of rawReadsQC will generate a folder ReadQC/PreQC_pe_reads/
       which contains the FASTQC reports of the raw paired-end fastq files
