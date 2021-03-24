@@ -464,6 +464,12 @@ Quantification of the transcripts can be done using command ``alignmentFreeQuant
                                 --dea-method deseq2 \
                                 --reference-condition control \
                                 --local-scheduler
+				
+      ### (or)
+		
+      [RNASeq-Analysis]$ python rnaseq.py alignmentFreeDEA --alignmentFreeDEA-quant-method salmon --alignmentFreeDEA-pre-process-reads no 		
+      			 --alignmentFreeDEA-dea-method deseq2 --alignmentFreeDEA-reference-condition control --local-scheduler
+				
 
 
 **5. Alignment based Differential Expression Analysis**
